@@ -26,7 +26,7 @@ export default createStore({
 			state.start += 10;
 		},
 		prevPokemonsMutation(state, payload) {
-			if ((state.start = 0)) {
+			if (state.start == 0) {
 			} else {
 				state.start -= 10;
 			}
@@ -38,7 +38,10 @@ export default createStore({
 				method: "GET",
 			};
 			let arrayPoke = [];
-			const datos = await fetch(URL, params);
+			const datos = await fetch(
+				`https://pokeapi.co/api/v2/pokemon/?offset=${state.start}&limit=${state.end}/`,
+				params
+			);
 			let pokemons = await datos.json();
 
 			pokemons.results.forEach(async (pokemon) => {
