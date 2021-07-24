@@ -3,13 +3,14 @@
 		<div class="row" style="justify-content:center">
 			<div class="input-group rounded col-3" style="width:40%">
 				<input
-					type="search"
+					type="text"
 					v-model="finder"
 					class="form-control rounded"
 					placeholder="Which pokemon are you looking for?"
-					aria-label="Search"
 				/>
-				<span class="input-group-text border-0" id="search-addon">
+				{{ $data }}
+
+				<span class="input-group-text border-0">
 					<i class="fas fa-search"></i>
 				</span>
 			</div>
@@ -30,7 +31,7 @@
 		</div>
 		<!-- POKEMONS -->
 		<div class="container d-flex flex-wrap">
-			<div v-for="(poke, index) in pokes" :key="index">
+			<div v-for="(poke, index) in findX" :key="index">
 				<div class="card p-3" style="width: 18rem;">
 					<img :src="poke.sprites.front_default" class="card-img" alt="" />
 					<div class="card-cluster">
@@ -51,14 +52,19 @@
 import {mapState, mapActions} from "vuex";
 
 export default {
+	data() {
+		return {
+			finder: "",
+		};
+	},
 	name: "Home",
 	components: {},
 	computed: {
 		...mapState(["pokes", "start", "end"]),
 
-		find() {
-			let pokes = new RegExp(this.finder, "i");
-			return this.pokes.filter((name) => name.name.match(pokes));
+		findX() {
+			let pokesX = new RegExp(this.finder, "i");
+			return this.pokes.filter((name) => name.name.match(pokesX));
 		},
 	},
 	methods: {
