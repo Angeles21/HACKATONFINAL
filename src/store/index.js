@@ -11,9 +11,12 @@ export default createStore({
 			state.pokes = payload;
 			console.log(payload);
 		},
+		getPokemonsMutation(state, payload) {
+			state.pokemon = state.pokes.find((element) => element.id === parseInt(payload));
+		},
 	},
 	actions: {
-		async setPokemonAction({commit}) {
+		async setPokemonAction({commit, state}) {
 			const params = {
 				method: "GET",
 			};
@@ -29,6 +32,10 @@ export default createStore({
 
 				commit("setPokemonMutation", arrayPokemones);
 			});
+		},
+		getPokemonsAction({commit}, id) {
+			commit("getPokemonsMutation", id);
+			//  console.log(id);
 		},
 	},
 });

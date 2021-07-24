@@ -20,3 +20,19 @@
 		</section>
 	</div>
 </template>
+
+<script>
+import {mapState, mapActions} from "vuex";
+export default {
+	computed: {
+		...mapState(["pokemon"]),
+	},
+	methods: {
+		...mapActions(["getPokemonsAction"]),
+	},
+
+	created() {
+		this.getPokemonsAction(this.$route.params.id);
+	},
+};
+</script>
