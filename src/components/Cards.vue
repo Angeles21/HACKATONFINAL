@@ -4,6 +4,7 @@
 			<div class="input-group rounded col-3" style="width:40%">
 				<input
 					type="search"
+					v-model="finder"
 					class="form-control rounded"
 					placeholder="Which pokemon are you looking for?"
 					aria-label="Search"
@@ -37,7 +38,7 @@
 						<p class="card-text">N°: {{ poke.order }}</p>
 						<p class="card-text">Height: {{ poke.height }}inches</p>
 						<p class="card-text">Weight: {{ poke.weight }}lbs</p>
-						<a class="btn">More Info</a>
+						<router-link :to="`/pokemon/${poke.id}`" class="btn">More Info</router-link>
 					</div>
 				</div>
 			</div>
@@ -53,10 +54,24 @@ export default {
 	name: "Home",
 	components: {},
 	computed: {
-		...mapState(["pokes"]),
+		...mapState(["pokes", "start", "end"]),
+
+		find() {
+			let pokes = new RegExp(this.finder, "i");
+			return this.pokes.filter((name) => name.name.match(pokes));
+		},
 	},
 	methods: {
-		...mapActions(["setPokemonAction"]),
+		...mapActions(["setPokemonAction", "nextPokemonsAction", "prevPokemonsAction"]),
+
+		add() {
+			this.nextPokemonsAction(10);
+			this.setPokemonAction();
+		},
+		remove() {
+			this.prevPokemonsAction(10);
+			this.setPokemonAction();
+		},
 	},
 	created() {
 		this.setPokemonAction();

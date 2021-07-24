@@ -5,6 +5,11 @@ const URL = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=20";
 export default createStore({
 	state: {
 		pokes: [],
+		poke: {
+			name: "",
+		},
+		start: 0,
+		end: 10,
 	},
 	mutations: {
 		setPokemonMutation(state, payload) {
@@ -12,7 +17,19 @@ export default createStore({
 			console.log(payload);
 		},
 		getPokemonsMutation(state, payload) {
-			state.pokemon = state.pokes.find((element) => element.id === parseInt(payload));
+			state.pokes = state.pokes.find((element) => element.id === parseInt(payload));
+		},
+		getPokemonMutation(state, payload) {
+			state.poke = state.pokes.find((poke) => poke.id === parseInt(payload));
+		},
+		nextPokemonsMutation(state, payload) {
+			state.start += 10;
+		},
+		prevPokemonsMutation(state, payload) {
+			if ((state.start = 0)) {
+			} else {
+				state.start -= 10;
+			}
 		},
 	},
 	actions: {
@@ -20,22 +37,30 @@ export default createStore({
 			const params = {
 				method: "GET",
 			};
-			let arrayPokemones = [];
+			let arrayPoke = [];
 			const datos = await fetch(URL, params);
-			let pokemones = await datos.json();
+			let pokemons = await datos.json();
 
-			pokemones.results.forEach(async (pokemon) => {
+			pokemons.results.forEach(async (pokemon) => {
 				const data = await fetch(pokemon.url);
 				let elemento = await data.json();
 
-				arrayPokemones = [...arrayPokemones, elemento];
+				arrayPoke = [...arrayPoke, elemento];
 
-				commit("setPokemonMutation", arrayPokemones);
+				commit("setPokemonMutation", arrayPoke);
 			});
 		},
 		getPokemonsAction({commit}, id) {
 			commit("getPokemonsMutation", id);
-			//  console.log(id);
+		},
+		getPokemonAction({commit}, id) {
+			commit("getPokemonMutation", id);
+		},
+		nextPokemonsAction({commit}) {
+			commit("nextPokemonsMutation");
+		},
+		prevPokemonsAction({commit}) {
+			commit("prevPokemonsMutation");
 		},
 	},
 });
